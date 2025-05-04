@@ -1,12 +1,110 @@
-- 👋 Hi, I’m @endjfhffg
-- 👀 I’m interested in ...
-- 🌱 I’m currently learning ...
-- 💞️ I’m looking to collaborate on ...
-- 📫 How to reach me ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
+-- CityFarmX | Auto Farm de Gás - Mini City RP
+-- Compatível com Arceus X (Mobile)
+-- Interface com botão X e botão secreto "NQHX"
 
-<!---
-endjfhffg/endjfhffg is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+
+-- GUI
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "CityFarmX_GUI"
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 200, 0, 140)
+frame.Position = UDim2.new(1, -210, 1, -160)
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+frame.BorderSizePixel = 0
+frame.Visible = true
+
+local uicorner = Instance.new("UICorner", frame)
+
+local title = Instance.new("TextLabel", frame)
+title.Text = "CityFarmX"
+title.Size = UDim2.new(1, 0, 0, 30)
+title.TextColor3 = Color3.new(1, 1, 1)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+
+-- Botão de Ativar Farm
+local btn = Instance.new("TextButton", frame)
+btn.Text = "Ativar Farm"
+btn.Size = UDim2.new(1, -20, 0, 40)
+btn.Position = UDim2.new(0, 10, 0, 40)
+btn.BackgroundColor3 = Color3.fromRGB(60, 120, 60)
+btn.TextColor3 = Color3.new(1, 1, 1)
+btn.Font = Enum.Font.Gotham
+btn.TextSize = 18
+
+local corner = Instance.new("UICorner", btn)
+
+-- Botão X
+local fechar = Instance.new("TextButton", frame)
+fechar.Text = "X"
+fechar.Size = UDim2.new(0, 30, 0, 30)
+fechar.Position = UDim2.new(1, -35, 0, 5)
+fechar.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+fechar.TextColor3 = Color3.new(1, 1, 1)
+fechar.Font = Enum.Font.GothamBold
+fechar.TextSize = 16
+
+local cornerX = Instance.new("UICorner", fechar)
+
+-- Botão secreto NQHX
+local secreto = Instance.new("TextButton", gui)
+secreto.Text = "NQHX"
+secreto.Size = UDim2.new(0, 60, 0, 25)
+secreto.Position = UDim2.new(0, 10, 1, -40)
+secreto.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+secreto.TextColor3 = Color3.new(1, 1, 1)
+secreto.Font = Enum.Font.Gotham
+secreto.TextSize = 14
+secreto.Visible = false
+
+local cornerSecret = Instance.new("UICorner", secreto)
+
+-- Controle da interface
+fechar.MouseButton1Click:Connect(function()
+	frame.Visible = false
+	secreto.Visible = true
+end)
+
+secreto.MouseButton1Click:Connect(function()
+	frame.Visible = true
+	secreto.Visible = false
+end)
+
+-- Farm de Gás
+local ativo = false
+
+btn.MouseButton1Click:Connect(function()
+	ativo = not ativo
+	btn.Text = ativo and "Desativar Farm" or "Ativar Farm"
+
+	if ativo then
+		spawn(function()
+			while ativo do
+				local botijao = workspace:FindFirstChild("Botijao") -- nome pode variar
+				local entrega = workspace:FindFirstChild("EntregaGás") -- nome pode variar
+
+				if botijao and entrega then
+					hrp.CFrame = botijao.CFrame + Vector3.new(0, 2, 0)
+					wait(0.3)
+					firetouchinterest(hrp, botijao, 0)
+					wait(0.2)
+					firetouchinterest(hrp, botijao, 1)
+
+					wait(0.5)
+					hrp.CFrame = entrega.CFrame + Vector3.new(0, 2, 0)
+					wait(0.3)
+					firetouchinterest(hrp, entrega, 0)
+					wait(0.2)
+					firetouchinterest(hrp, entrega, 1)
+				end
+				wait(1)
+			end
+		end)
+	end
+end)
